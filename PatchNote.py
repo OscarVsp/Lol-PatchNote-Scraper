@@ -38,7 +38,15 @@ class PatchNote:
         try:
             self.title = patch_note_data['result']['data']['all']['nodes'][0]['description']
         except (Exception):
-            raise PatchNoteException(f"Patch note title not found")
+            raise PatchNoteException(f"Title not found")
+        
+        try:
+            self.label : str = patch_note_data['result']['data']['all']['nodes'][0]['title'].split(' ')[1]
+            self.season_number : int = int(self.label.split('.')[0])
+            self.patch_number : int = int(self.label.split('.')[1])
+        except (Exception):
+            raise PatchNoteException(f"Season and patch could not be retrieved from title")
+    
         
         soup = BeautifulSoup(patch_note_data['result']['data']['all']['nodes'][0]['patch_notes_body'][0]['patch_notes']['html'], 'html.parser')
         
@@ -51,12 +59,12 @@ class PatchNote:
         try:
             self.overview_image : str = soup.find(attrs={"class": "skins cboxElement"}).img.get('src')
         except (Exception):
-            self.overview_image : str = 'https://images.contentstack.io/v3/assets/blt731acb42bb3d1659/bltf06237d0ebbe32e0/5efc23abee48da0f762bc2f2/LOL_PROMOART_4.jpg'
+            raise PatchNoteException(f"Not able to overview image from html")
 
             
         
     def __str__(self):
-        return f"{self.title}\n({self.link})\n\n{self.description}\n\n{self.overview_image}\n\n{'-'*10}\n\nMenu url: {self.menu_request_url}\n\nPatch request url: {self.patch_request_url}"
+        return f"{self.season_number}.{self.patch_number}\n{self.title}\n({self.link})\n\n{self.description}\n\n{self.overview_image}\n\n{'-'*10}\n\nMenu url: {self.menu_request_url}\n\nPatch request url: {self.patch_request_url}"
         
         
 
@@ -68,7 +76,13 @@ class PatchNoteException(Exception):
 
         
 if __name__ == '__main__':
-    patch = PatchNote()
+    patch = PatchNote(0)
+    print(patch)
+    patch = PatchNote(1)
+    print(patch)
+    patch = PatchNote(2)
+    print(patch)
+    patch = PatchNote(3)
     print(patch)
 
     
