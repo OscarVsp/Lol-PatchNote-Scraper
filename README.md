@@ -15,7 +15,6 @@ Simply instantiate `PatchNote` with the following optional arguments:
 ## Patch information
 During initialisation, the `PatchNote` object will create the following attributs that can be used to get patch note informations:
 - `title (str)`: the title of the patch article
-- `label (str)`: the label of the patch (ex: `12.9`)
 - `season_number (int)`: the number of the season
 - `patch_number (int)`: the number of the patch
 - `description (str)`: the first paragraph of the article
