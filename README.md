@@ -7,7 +7,7 @@ But I'll try to maintain it if it's broken.
 
 # Usage
 
-Simply instantiate `PatchNotes` with the following optional arguments:
+Simply instantiate `PatchNote` with the following optional arguments:
 - `previous (int)`: to specifie the patch wanted, from the current one (`0` by default to get the current patch, `1` to get the previous one, etc...)
 - `lang (str)`: the location code to specifie the langage (`en-gb` by default)
 
