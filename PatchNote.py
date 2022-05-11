@@ -10,10 +10,15 @@ patchs_notes_menu_url = '/news/tags/patch-notes/'
 end_url = "page-data.json"
 view_url = "https://www.leagueoflegends.com/"
 
+langs = ['fr-fr','en-gb']
+
         
 class PatchNote:
     
     def __init__(self, previous : int = 0, lang : str = 'en-gb'):
+        if lang not in langs:
+            print(f"lang '{lang}' is not officially supported. I will to get the same way than for 'en-gb' and warn you in case of error.")
+                
         
         self.menu_request_url : str = base_url+lang+patchs_notes_menu_url+end_url
         
@@ -25,7 +30,7 @@ class PatchNote:
         try:
             patch_note_url = patch_notes_menu_data['result']['data']['articles']['nodes'][previous]['url']['url']
         except (Exception):
-            raise PatchNoteException(f"Patch note url not found in patch notes menu data")
+            raise PatchNoteException(f"Patch note url not found in patch notes menu data.")
         
         self.link = view_url + lang + patch_note_url 
         self.patch_request_url : str = base_url+lang+patch_note_url+end_url
@@ -40,13 +45,29 @@ class PatchNote:
         except (Exception):
             raise PatchNoteException(f"Title not found")
         
-        try:
-            self.label : str = patch_note_data['result']['data']['all']['nodes'][0]['title'].split(' ')[1]
-            self.season_number : int = int(self.label.split('.')[0])
-            self.patch_number : int = int(self.label.split('.')[1])
-        except (Exception):
-            raise PatchNoteException(f"Season and patch could not be retrieved from title")
-    
+        if lang in langs:
+            try:
+                if lang == 'fr-fr':
+                    print(patch_note_data['result']['data']['all']['nodes'][0]['title'])
+                    self.label : str = patch_note_data['result']['data']['all']['nodes'][0]['title'].split(' ')[3]
+                    self.season_number : int = 0
+                    self.patch_number : int = 0
+                elif lang == 'en-gb':
+                    self.label : str = patch_note_data['result']['data']['all']['nodes'][0]['title'].split(' ')[1]
+                    self.season_number : int = int(self.label.split('.')[0])
+                    self.patch_number : int = int(self.label.split('.')[1])
+            except (Exception):
+                raise PatchNoteException(f"Label, season_number and patch_number could not be retrieved from title.")
+        else:
+            try:
+                self.label : str = patch_note_data['result']['data']['all']['nodes'][0]['title'].split(' ')[1]
+                self.season_number : int = int(self.label.split('.')[0])
+                self.patch_number : int = int(self.label.split('.')[1])
+            except (Exception):
+                print(f"Label, season_number and patch_number could not be retrieved from title. This can be due to the unsupported lang. Default value are used instead.")
+                self.label : str = "NA"
+                self.season_number : int = 0
+                self.patch_number : int = 0
         
         soup = BeautifulSoup(patch_note_data['result']['data']['all']['nodes'][0]['patch_notes_body'][0]['patch_notes']['html'], 'html.parser')
         
@@ -76,13 +97,8 @@ class PatchNoteException(Exception):
 
         
 if __name__ == '__main__':
-    patch = PatchNote(0)
+    patch = PatchNote(previous = 0, lang = 'fr-fr')
     print(patch)
-    patch = PatchNote(1)
-    print(patch)
-    patch = PatchNote(2)
-    print(patch)
-    patch = PatchNote(3)
-    print(patch)
+
 
     
