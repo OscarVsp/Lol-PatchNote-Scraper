@@ -1,10 +1,8 @@
-from PatchNote import PatchNote, PatchNoteException
+from PatchNote import PatchNote, langs
 
-langs = ['fr-fr','en-gb']
+n_tests = 2
 
-n_tests = 10
-
-print(f"Starting tests for langs {langs} for {n_tests} patchs...")
+print(f"Starting tests for langs {langs} for last {n_tests} patchs...")
 
 tests_passed = []
 tests_failed = []
@@ -14,8 +12,8 @@ for lang in langs:
         try:
             tests_passed.append((lang,i,PatchNote(previous = i, lang = lang)))
             print(f"Test for lang = '{lang}', previous = '{i}' passed.")
-        except (PatchNoteException) as err:
-            print(f"Test for lang = '{lang}', previous = '{i}' failed with error: '{err}'")
+        except Exception as err:
+            print(f"Test for lang = '{lang}', previous = '{i}' failed with error: '{type(err)}'")
             tests_failed.append((lang,i,err))
     
 n_tests_total = n_tests*len(langs)
