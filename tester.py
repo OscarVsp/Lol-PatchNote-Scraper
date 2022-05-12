@@ -1,13 +1,13 @@
-from PatchNote import PatchNote, langs
+from PatchNote import PatchNote
 
 n_tests = 2
 
-print(f"Starting tests for langs {langs} for last {n_tests} patchs...")
+print(f"Starting tests for langs {PatchNote.langs} for last {n_tests} patchs...")
 
 tests_passed = []
 tests_failed = []
 
-for lang in langs:
+for lang in PatchNote.langs:
     for i in range(n_tests):
         try:
             tests_passed.append((lang,i,PatchNote(previous = i, lang = lang)))
