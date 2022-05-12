@@ -119,12 +119,7 @@ class PatchNote:
     def __str__(self):
         return f"{self.season_number}.{self.patch_number}\n{self.title}\n({self.link})\n\n{self.description}\n\n{self.overview_image}\n\n{'-'*10}\n\nMenu url: {self.menu_request_url}\n\nPatch request url: {self.patch_request_url}"
         
-
-
-        
+   
 if __name__ == '__main__':
     patch = PatchNote()
     print(patch)
-
-
-    
