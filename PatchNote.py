@@ -124,7 +124,7 @@ class PatchNote:
 
         
 if __name__ == '__main__':
-    patch = PatchNote(lang='dd')
+    patch = PatchNote()
     print(patch)
 
 
